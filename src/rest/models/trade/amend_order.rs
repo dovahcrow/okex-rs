@@ -34,12 +34,13 @@ impl AmendOrderRequest {
 #[serde(rename_all = "camelCase")]
 pub struct AmendOrderResponse {
     pub ord_id: String,
-    #[serde(deserialize_with = "super::super::empty_string_to_none")]
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
     pub cl_ord_id: Option<String>,
-    #[serde(deserialize_with = "super::super::empty_string_to_none")]
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
     pub req_id: Option<String>,
-    pub s_code: String,
-    #[serde(deserialize_with = "super::super::empty_string_to_none")]
+    #[serde(deserialize_with = "crate::parser::from_str")]
+    pub s_code: u64,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
     pub s_msg: Option<String>,
 }
 

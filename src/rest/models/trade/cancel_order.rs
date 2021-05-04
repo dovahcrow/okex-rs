@@ -22,9 +22,12 @@ impl CancelOrderRequest {
 #[serde(rename_all = "camelCase")]
 pub struct CancelOrderResponse {
     pub ord_id: String,
-    pub cl_ord_id: String,
-    pub s_code: String,
-    pub s_msg: String,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    pub cl_ord_id: Option<String>,
+    #[serde(deserialize_with = "crate::parser::from_str")]
+    pub s_code: u64,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    pub s_msg: Option<String>,
 }
 
 impl Request for CancelOrderRequest {

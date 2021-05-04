@@ -1,29 +1,40 @@
+use crate::enums::{ExecType, InstType, OrdType, State, TdMode};
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Order {
-    pub inst_type: String,
+    pub inst_type: InstType,
     pub inst_id: String,
     pub ccy: String,
     pub ord_id: String,
-    pub cl_ord_id: String,
-    pub tag: String,
-    pub px: String,
-    pub sz: String,
-    pub ord_type: String,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    pub cl_ord_id: Option<String>,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    pub tag: Option<String>,
+    #[serde(deserialize_with = "crate::parser::from_str")]
+    pub px: f64,
+    #[serde(deserialize_with = "crate::parser::from_str")]
+    pub sz: f64,
+    pub ord_type: OrdType,
     pub side: String,
     pub pos_side: String,
-    pub td_mode: String,
-    pub fill_sz: String,
-    pub fill_px: String,
+    pub td_mode: TdMode,
+    #[serde(deserialize_with = "crate::parser::from_str")]
+    pub fill_sz: f64,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    pub fill_px: Option<f64>,
     pub trade_id: String,
-    pub acc_fill_sz: String,
+    #[serde(deserialize_with = "crate::parser::from_str")]
+    pub acc_fill_sz: f64,
     pub fill_time: String,
-    pub fill_fee: String,
-    pub fill_fee_ccy: String,
-    pub exec_type: String,
-    pub state: String,
+    #[serde(deserialize_with = "crate::parser::from_str")]
+    pub fill_fee: f64,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    pub fill_fee_ccy: Option<f64>,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    pub exec_type: Option<ExecType>,
+    pub state: State,
     pub avg_px: String,
     pub lever: String,
     pub tp_trigger_px: String,

@@ -1,9 +1,10 @@
+use crate::enums::InstType;
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Ticker {
-    pub inst_type: String,
+    pub inst_type: InstType,
     pub inst_id: String,
     pub last: String,
     pub last_sz: String,

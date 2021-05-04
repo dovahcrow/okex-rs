@@ -1,6 +1,7 @@
+use crate::enums::InstType;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(tag = "channel")]
 pub enum Channel {
     #[serde(rename = "books-l2-tbt")]
@@ -11,7 +12,7 @@ pub enum Channel {
     #[serde(rename = "orders")]
     Orders {
         #[serde(rename = "instType")]
-        inst_type: String,
+        inst_type: InstType,
         uly: Option<String>,
         #[serde(rename = "instId")]
         inst_id: Option<String>,
