@@ -1,4 +1,4 @@
-use crate::enums::{ExecType, InstType, OrdType, State, TdMode};
+use crate::enums::{ExecType, InstType, OrdState, OrdType, TdMode};
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Clone)]
@@ -32,9 +32,9 @@ pub struct Order {
     pub fill_fee: f64,
     #[serde(deserialize_with = "crate::parser::from_str_opt")]
     pub fill_fee_ccy: Option<f64>,
-    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    #[serde(deserialize_with = "crate::parser::deserialize_str_opt")]
     pub exec_type: Option<ExecType>,
-    pub state: State,
+    pub state: OrdState,
     pub avg_px: String,
     pub lever: String,
     pub tp_trigger_px: String,

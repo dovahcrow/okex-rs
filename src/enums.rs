@@ -1,7 +1,15 @@
 use serde::{Deserialize, Serialize};
-use strum::EnumString;
 
-#[derive(Clone, Copy, Debug, EnumString, Deserialize, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Alias {
+    ThisWeek,
+    NextWeek,
+    Quarter,
+    NextQuarter,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 pub enum ExecType {
     T,
     M,
@@ -51,9 +59,31 @@ pub enum PosSide {
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
-pub enum State {
+pub enum OrdState {
     Canceled,
     Live,
     PartiallyFilled,
     Filled,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "UPPERCASE")]
+pub enum OptType {
+    C,
+    P,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CtType {
+    Linear,
+    Inverse,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum InstrumentState {
+    Live,
+    Suspend,
+    Preopen,
 }

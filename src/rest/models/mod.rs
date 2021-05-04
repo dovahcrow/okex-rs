@@ -1,7 +1,9 @@
 mod account;
+mod public;
 mod trade;
 
 pub use account::*;
+pub use public::*;
 pub use trade::*;
 
 use reqwest::Method;
