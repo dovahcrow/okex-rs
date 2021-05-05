@@ -31,7 +31,7 @@ pub struct Order {
     #[serde(deserialize_with = "crate::parser::from_str")]
     pub fill_fee: f64,
     #[serde(deserialize_with = "crate::parser::from_str_opt")]
-    pub fill_fee_ccy: Option<f64>,
+    pub fill_fee_ccy: Option<String>,
     #[serde(deserialize_with = "crate::parser::deserialize_str_opt")]
     pub exec_type: Option<ExecType>,
     pub state: OrdState,
