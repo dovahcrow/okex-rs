@@ -25,6 +25,12 @@ pub enum InstType {
     Option,
     Any,
 }
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MgnMode {
+    Cross,
+    Isolated,
+}
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -55,6 +61,7 @@ pub enum OrdType {
 pub enum PosSide {
     Long,
     Short,
+    Net,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]

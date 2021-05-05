@@ -1,4 +1,6 @@
 use crate::enums::{ExecType, InstType, OrdState, OrdType, TdMode};
+use crate::parser::ts_milliseconds;
+use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Clone)]
@@ -47,8 +49,10 @@ pub struct Order {
     pub rebate: String,
     pub pnl: String,
     pub category: String,
-    pub u_time: String,
-    pub c_time: String,
+    #[serde(deserialize_with = "ts_milliseconds")]
+    pub u_time: DateTime<Utc>,
+    #[serde(deserialize_with = "ts_milliseconds")]
+    pub c_time: DateTime<Utc>,
     pub req_id: String,
     pub amend_result: String,
     pub code: String,

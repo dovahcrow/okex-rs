@@ -3,7 +3,6 @@ use http::Method;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-/// Get chat messages.
 pub struct BalanceRequest {
     pub ccy: Option<String>,
 }
