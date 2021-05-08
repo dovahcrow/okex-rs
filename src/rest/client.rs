@@ -2,7 +2,6 @@ use super::models::Request;
 use crate::consts::REST_URL;
 use crate::credential::Credential;
 use crate::error::OkExError;
-use anyhow::Error;
 use chrono::{SecondsFormat, Utc};
 use derive_builder::Builder;
 use fehler::{throw, throws};
@@ -46,7 +45,7 @@ impl OkExRest {
         OkExRestBuilder::default()
     }
 
-    #[throws(Error)]
+    #[throws(OkExError)]
     pub async fn request<R>(&self, req: R) -> R::Response
     where
         R: Request,
@@ -87,7 +86,7 @@ impl OkExRest {
         self.handle_response(resp).await?
     }
 
-    #[throws(Error)]
+    #[throws(OkExError)]
     fn get_credential(&self) -> &Credential {
         match self.credential.as_ref() {
             None => throw!(OkExError::NoApiKeySet),
@@ -95,7 +94,7 @@ impl OkExRest {
         }
     }
 
-    #[throws(Error)]
+    #[throws(OkExError)]
     async fn handle_response<T: DeserializeOwned>(&self, resp: Response) -> T {
         let payload = resp.text().await?;
 

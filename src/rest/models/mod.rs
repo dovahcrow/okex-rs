@@ -1,8 +1,10 @@
 mod account;
+mod market;
 mod public;
 mod trade;
 
 pub use account::*;
+pub use market::*;
 pub use public::*;
 pub use trade::*;
 

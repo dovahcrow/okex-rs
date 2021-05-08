@@ -23,8 +23,3 @@ pub enum Channel {
         inst_id: String,
     },
 }
-
-// MARGIN
-// SWAP
-// FUTURES
-// OPTION

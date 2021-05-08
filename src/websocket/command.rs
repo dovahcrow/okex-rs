@@ -1,6 +1,6 @@
 use super::Channel;
 use super::OkExWebsocket;
-use anyhow::Error;
+use crate::error::OkExError;
 use chrono::Utc;
 use fehler::throws;
 use serde::{Deserialize, Serialize};
@@ -20,7 +20,7 @@ impl Command {
         Command::Subscribe(topics)
     }
 
-    #[throws(Error)]
+    #[throws(OkExError)]
     pub fn login(client: &OkExWebsocket) -> Command {
         let cred = client.get_credential()?;
 

@@ -23,7 +23,6 @@ use tokio_tungstenite::{connect_async, MaybeTlsStream, WebSocketStream};
 use tungstenite::protocol::Message as WSMessage;
 use url::Url;
 
-#[allow(dead_code)]
 type WSStream = WebSocketStream<MaybeTlsStream<TcpStream>>;
 
 pub struct OkExWebsocket {
@@ -32,8 +31,20 @@ pub struct OkExWebsocket {
 }
 
 impl OkExWebsocket {
-    #[throws(Error)]
-    pub async fn new(private: bool) -> Self {
+    #[throws(OkExError)]
+    pub async fn new() -> Self {
+        Self::new_impl(false).await?
+    }
+
+    #[throws(OkExError)]
+    pub async fn with_credential(api_key: &str, api_secret: &str, passphrase: &str) -> Self {
+        let mut c = Self::new_impl(true).await?;
+        c.credential = Some(Credential::new(api_key, api_secret, passphrase));
+        c
+    }
+
+    #[throws(OkExError)]
+    async fn new_impl(private: bool) -> Self {
         let url = if private { PRIV_WS_URL } else { PUB_WS_URL };
         let (stream, _) = connect_async(Url::parse(&url).unwrap()).await?;
         Self {
@@ -42,19 +53,7 @@ impl OkExWebsocket {
         }
     }
 
-    #[throws(Error)]
-    pub async fn with_credential(
-        private: bool,
-        api_key: &str,
-        api_secret: &str,
-        passphrase: &str,
-    ) -> Self {
-        let mut c = Self::new(private).await?;
-        c.credential = Some(Credential::new(api_key, api_secret, passphrase));
-        c
-    }
-
-    #[throws(Error)]
+    #[throws(OkExError)]
     fn get_credential(&self) -> &Credential {
         match self.credential.as_ref() {
             None => throw!(OkExError::NoApiKeySet),
@@ -93,7 +92,7 @@ impl Sink<Command> for OkExWebsocket {
 }
 
 impl Stream for OkExWebsocket {
-    type Item = anyhow::Result<Message>;
+    type Item = Result<Message, OkExError>;
 
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context) -> Poll<Option<Self::Item>> {
         let inner = Pin::new(&mut self.inner);
@@ -110,19 +109,19 @@ impl Stream for OkExWebsocket {
     }
 }
 
-#[throws(Error)]
+#[throws(OkExError)]
 fn parse_message(msg: WSMessage) -> Message {
     match msg {
         WSMessage::Text(message) => match message.as_str() {
             "pong" => Message::Pong,
             others => match from_str(others) {
                 Ok(r) => r,
-                Err(_) => unreachable!("Cannot deserialize message from BitMEX: '{}'", others),
+                Err(_) => unreachable!("Cannot deserialize message from OkEx: '{}'", others),
             },
         },
         WSMessage::Close(_) => throw!(OkExError::WebsocketClosed),
-        WSMessage::Binary(c) => throw!(OkExError::UnexpectedWebsocketBinaryContent(c)),
-        WSMessage::Ping(_) => unimplemented!(),
-        WSMessage::Pong(_) => unimplemented!(),
+        WSMessage::Binary(_) => throw!(OkExError::UnexpectedWebsocketBinaryMessage),
+        WSMessage::Ping(_) => throw!(OkExError::UnexpectedWebsocketPingMessage),
+        WSMessage::Pong(_) => throw!(OkExError::UnexpectedWebsocketPongMessage),
     }
 }

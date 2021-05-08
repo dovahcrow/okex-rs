@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "camelCase")]
 pub struct AmendOrderRequest {
     pub inst_id: String,
+    pub cxl_on_fail: bool,
     pub ord_id: Option<String>,
     pub new_sz: Option<String>,
     pub new_px: Option<String>,
@@ -15,6 +16,7 @@ impl AmendOrderRequest {
     pub fn new_qty(inst_id: &str, ord_id: &str, qty: f64) -> Self {
         Self {
             inst_id: inst_id.to_string(),
+            cxl_on_fail: false,
             ord_id: Some(ord_id.into()),
             new_sz: Some(qty.to_string()),
             new_px: None,
@@ -23,6 +25,7 @@ impl AmendOrderRequest {
     pub fn new_price(inst_id: &str, ord_id: &str, price: f64) -> Self {
         Self {
             inst_id: inst_id.to_string(),
+            cxl_on_fail: false,
             ord_id: Some(ord_id.into()),
             new_sz: None,
             new_px: Some(price.to_string()),

@@ -54,7 +54,8 @@ pub struct Order {
     #[serde(deserialize_with = "ts_milliseconds")]
     pub c_time: DateTime<Utc>,
     pub req_id: String,
-    pub amend_result: String,
+    #[serde(deserialize_with = "crate::parser::from_str_opt")]
+    pub amend_result: Option<i64>,
     pub code: String,
     pub msg: String,
 }

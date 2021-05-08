@@ -1,5 +1,4 @@
 mod order;
-mod ticker;
 
+pub use crate::rest::TickerResponse;
 pub use order::*;
-pub use ticker::*;
