@@ -45,7 +45,7 @@ impl OkExWebsocket {
 
     #[throws(OkExError)]
     async fn new_impl(private: bool) -> Self {
-        let url = if private { PRIV_WS_URL } else { PUB_WS_URL };
+        let url = if private { *PRIV_WS_URL } else { *PUB_WS_URL };
         let (stream, _) = connect_async(Url::parse(&url).unwrap()).await?;
         Self {
             credential: None,
