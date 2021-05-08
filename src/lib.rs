@@ -1,4 +1,4 @@
-mod consts;
+pub mod urls;
 mod credential;
 pub mod enums;
 mod error;

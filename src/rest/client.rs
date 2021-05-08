@@ -1,7 +1,7 @@
 use super::models::Request;
-use crate::consts::REST_URL;
 use crate::credential::Credential;
 use crate::error::OkExError;
+use crate::urls::REST_URL;
 use chrono::{SecondsFormat, Utc};
 use derive_builder::Builder;
 use fehler::{throw, throws};
