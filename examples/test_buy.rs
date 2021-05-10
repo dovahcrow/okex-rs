@@ -4,7 +4,10 @@ use futures::{SinkExt, StreamExt};
 use okex::websocket::{Channel, Command, OkExWebsocket};
 use okex::{
     enums::{InstType, Side, TdMode},
-    rest::{AmendOrderRequest, BalanceRequest, CancelOrderRequest, OkExRest, OrderRequest},
+    rest::{
+        AmendOrderRequest, BalanceRequest, CancelOrderRequest, OkExRest, OrderDetailsRequest,
+        PlaceOrderRequest,
+    },
 };
 use std::env::var;
 use std::time::Duration;
@@ -52,21 +55,33 @@ async fn main() {
 
     println!("{:?}", resp);
 
-    let mut req = OrderRequest::limit("IOTA-USDT", TdMode::Cross, Side::Buy, 1.8, 10.);
+    let mut req = PlaceOrderRequest::limit("IOTA-USDT", TdMode::Cross, Side::Buy, 1.5, 10.);
     req.set_ccy("USDT");
-
     let [resp] = client.request(req).await?;
+    println!("{:?}", resp);
+    let ord_id = resp.ord_id;
 
+    let [resp] = client
+        .request(OrderDetailsRequest::ord_id("IOTA-USDT", &ord_id))
+        .await?;
     println!("{:?}", resp);
 
-    let req = AmendOrderRequest::new_qty("IOTA-USDT", &resp.ord_id, 20.);
-    let resp1 = client.request(req).await?;
-
-    println!("{:?}", resp1);
-
-    let req = CancelOrderRequest::with_ord_id("IOTA-USDT", &resp.ord_id);
+    let req = AmendOrderRequest::new_qty("IOTA-USDT", &ord_id, 20.);
     let resp = client.request(req).await?;
+    println!("{:?}", resp);
 
+    let [resp] = client
+        .request(OrderDetailsRequest::ord_id("IOTA-USDT", &ord_id))
+        .await?;
+    println!("{:?}", resp);
+
+    let resp = client
+        .request(CancelOrderRequest::with_ord_id("IOTA-USDT", &ord_id))
+        .await?;
+    println!("{:?}", resp);
+    let [resp] = client
+        .request(OrderDetailsRequest::ord_id("IOTA-USDT", &ord_id))
+        .await?;
     println!("{:?}", resp);
 
     jh.await?
