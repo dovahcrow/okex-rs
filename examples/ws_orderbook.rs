@@ -18,6 +18,7 @@ async fn main() {
 
     while let Some(x) = client.next().await {
         if let Message::Data { mut data, .. } = x.unwrap() {
+            assert!(data.len() == 1);
             let data: Book = from_value(data.pop().unwrap()).unwrap();
             println!("{:?}", data)
         }
