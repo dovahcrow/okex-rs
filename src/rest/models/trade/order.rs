@@ -104,47 +104,47 @@ impl OrderDetailsRequest {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OrderDetailsResponse {
-    inst_type: InstType,
-    inst_id: String,
-    ccy: String,
-    ord_id: String,
-    cl_ord_id: String,
-    tag: String,
+    pub inst_type: InstType,
+    pub inst_id: String,
+    pub ccy: String,
+    pub ord_id: String,
+    pub cl_ord_id: String,
+    pub tag: String,
     #[serde(deserialize_with = "crate::parser::from_str")]
-    px: f64,
+    pub px: f64,
     #[serde(deserialize_with = "crate::parser::from_str")]
-    sz: f64,
+    pub sz: f64,
     #[serde(deserialize_with = "crate::parser::from_str")]
-    pnl: f64,
-    ord_type: OrdType,
-    side: Side,
-    pos_side: PosSide,
-    td_mode: TdMode,
+    pub pnl: f64,
+    pub ord_type: OrdType,
+    pub side: Side,
+    pub pos_side: PosSide,
+    pub td_mode: TdMode,
     #[serde(deserialize_with = "crate::parser::from_str")]
-    acc_fill_sz: f64,
-    fill_px: String,
-    trade_id: String,
+    pub acc_fill_sz: f64,
+    pub fill_px: String,
+    pub trade_id: String,
     #[serde(deserialize_with = "crate::parser::from_str")]
-    fill_sz: f64,
-    fill_time: String,
-    state: OrdState,
-    avg_px: String,
-    lever: String,
-    tp_trigger_px: String,
-    tp_ord_px: String,
-    sl_trigger_px: String,
-    sl_ord_px: String,
-    fee_ccy: String,
+    pub fill_sz: f64,
+    pub fill_time: String,
+    pub state: OrdState,
+    pub avg_px: String,
+    pub lever: String,
+    pub tp_trigger_px: String,
+    pub tp_ord_px: String,
+    pub sl_trigger_px: String,
+    pub sl_ord_px: String,
+    pub fee_ccy: String,
     #[serde(deserialize_with = "crate::parser::from_str")]
-    fee: f64,
-    rebate_ccy: String,
+    pub fee: f64,
+    pub rebate_ccy: String,
     #[serde(deserialize_with = "crate::parser::from_str")]
-    rebate: f64,
-    category: String,
+    pub rebate: f64,
+    pub category: String,
     #[serde(deserialize_with = "ts_milliseconds")]
-    u_time: DateTime<Utc>,
+    pub u_time: DateTime<Utc>,
     #[serde(deserialize_with = "ts_milliseconds")]
-    c_time: DateTime<Utc>,
+    pub c_time: DateTime<Utc>,
 }
 
 impl Request for OrderDetailsRequest {
