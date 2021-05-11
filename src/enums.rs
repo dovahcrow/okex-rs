@@ -93,4 +93,5 @@ pub enum InstrumentState {
     Live,
     Suspend,
     Preopen,
+    Settlement,
 }
