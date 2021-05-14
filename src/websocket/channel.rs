@@ -24,6 +24,11 @@ pub enum Channel {
         #[serde(rename = "instId")]
         inst_id: String,
     },
+    #[serde(rename = "instruments")]
+    Instruments {
+        #[serde(rename = "instType")]
+        inst_type: InstType,
+    },
     #[serde(rename = "orders")]
     Orders {
         #[serde(rename = "instType")]
@@ -31,6 +36,11 @@ pub enum Channel {
         uly: Option<String>,
         #[serde(rename = "instId")]
         inst_id: Option<String>,
+    },
+    #[serde(rename = "price-limit")]
+    PriceLimit {
+        #[serde(rename = "instId")]
+        inst_id: String,
     },
     #[serde(rename = "tickers")]
     Tickers {
@@ -63,8 +73,18 @@ impl Channel {
         }
     }
 
+    pub fn instruments(inst_type: InstType) -> Self {
+        Self::Instruments { inst_type }
+    }
+
     pub fn tickers(inst_id: &str) -> Self {
         Self::Tickers {
+            inst_id: inst_id.into(),
+        }
+    }
+
+    pub fn price_limit(inst_id: &str) -> Self {
+        Self::PriceLimit {
             inst_id: inst_id.into(),
         }
     }

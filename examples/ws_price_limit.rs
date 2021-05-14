@@ -1,7 +1,7 @@
 use anyhow::Error;
 use fehler::throws;
 use futures::{SinkExt, StreamExt};
-use okex::websocket::{models::Ticker, Channel, Command, Message, OkExWebsocket};
+use okex::websocket::{models::PriceLimit, Channel, Command, Message, OkExWebsocket};
 use serde_json::from_value;
 
 #[throws(Error)]
@@ -13,17 +13,17 @@ async fn main() {
     let mut client = OkExWebsocket::new().await?;
 
     client
-        .send(Command::subscribe(vec![Channel::Tickers {
-            inst_id: "XCH-USDT".to_string(),
-        }]))
+        .send(Command::subscribe(vec![Channel::price_limit(
+            "XCH-USDT-SWAP",
+        )]))
         .await?;
 
     while let Some(x) = client.next().await {
         match x.unwrap() {
             Message::Data { arg, mut data, .. } => {
-                assert!(matches!(arg, Channel::Tickers { .. }));
+                assert!(matches!(arg, Channel::PriceLimit { .. }));
                 let data = data.pop().unwrap();
-                let x: Ticker = from_value(data).unwrap();
+                let x: PriceLimit = from_value(data).unwrap();
                 println!("{:?}", x)
             }
             Message::Error { code, msg, .. } => {
